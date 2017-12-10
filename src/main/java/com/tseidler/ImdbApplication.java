@@ -2,6 +2,8 @@ package com.tseidler;
 
 import com.tseidler.domain.Actor;
 import com.tseidler.domain.Movie;
+import com.tseidler.domain.MovieCast;
+import com.tseidler.service.MovieCastService;
 import com.tseidler.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -17,9 +19,10 @@ public class ImdbApplication implements CommandLineRunner {
 
     @Autowired
     private ActorService actorService;
-
     @Autowired
     private MovieService movieService;
+    @Autowired
+    private MovieCastService movieCastService;
 
 
     public static void main(String[] args) {
@@ -28,33 +31,60 @@ public class ImdbApplication implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-        actorService.addActor(new Actor("Stefan", "Beton"));
-        actorService.addActor(new Actor("Franek", "Śmietana"));
-        actorService.addActor(new Actor("Józef", "Beton"));
-        actorService.addActor(new Actor("Mateusz", "Molibdenowy"));
-        actorService.addActor(new Actor("Janusz", "Tytanowy"));
-        actorService.addActor(new Actor("Franek", "Śmietana"));
-        ArrayList<Actor> myChampion = actorService.findActorByLastname("Beton");
+        Actor stefan_beton = new Actor("Stefan", "Beton");
+        Actor franek_smietana = new Actor("Franek", "Śmietana");
+        Actor jozef_beton = new Actor("Józef", "Beton");
+        Actor molibdenowy_mateusz = new Actor("Mateusz", "Molibdenowy");
+        Actor tytanowy_janusz = new Actor("Janusz", "Tytanowy");
+        Actor franek_smietana_2 = new Actor("Franek", "Śmietana");
+        actorService.addActor(stefan_beton);
+        actorService.addActor(franek_smietana);
+        actorService.addActor(jozef_beton);
+        actorService.addActor(molibdenowy_mateusz);
+        actorService.addActor(tytanowy_janusz);
+        actorService.addActor(franek_smietana_2);
+        List<Actor> myChampion = actorService.findActorByLastname("Beton");
         System.out.println(myChampion.toString());
-        ArrayList<Actor> actors = actorService.getAllActors();
+        List<Actor> actors = actorService.getAllActors();
         actors.forEach(act -> System.out.println(act.toString()));
         System.out.println();
-        ArrayList<Actor> actors2 = actorService.findAllByFirstnameAndLastname("Franek", "Śmietana");
+        List<Actor> actors2 = actorService.findAllByFirstnameAndLastname("Franek", "Śmietana");
         actors2.forEach(act -> System.out.println(act.toString()));
         System.out.println();
 
-        movieService.addMovie(new Movie("Sarnie żniwo"));
-        movieService.addMovie(new Movie("Pocałunek kojota"));
-        movieService.addMovie(new Movie("Zmierzch browaru \"AWRUK\""));
-        ArrayList<Movie> movies = new ArrayList<>();
-        movies.add(new Movie("ABC przedszkolaka"));
-        movies.add(new Movie("ABC pierwszaka"));
-        movies.add(new Movie("Masarnia Satuk - dokument"));
+        Movie sarnie_zniwo = new Movie("Sarnie żniwo");
+        Movie pocalunek_kojota = new Movie("Pocałunek kojota");
+        Movie browar_awruk = new Movie("Zmierzch browaru \"AWRUK\"");
+        Movie abc_przedszkolaka = new Movie("ABC przedszkolaka");
+        Movie abc_pierwszaka = new Movie("ABC pierwszaka");
+        Movie masarnia_satuk = new Movie("Masarnia Satuk - dokument");
+
+        movieService.addMovie(sarnie_zniwo);
+        movieService.addMovie(pocalunek_kojota);
+        movieService.addMovie(browar_awruk);
+        List<Movie> movies = new ArrayList<>();
+        movies.add(abc_przedszkolaka);
+        movies.add(abc_pierwszaka);
+        movies.add(masarnia_satuk);
         movieService.addMovies(movies);
 
 
-        ArrayList<Movie> moviesList = movieService.getMovies();
+        List<Movie> moviesList = movieService.getMovies();
         moviesList.forEach(mv -> System.out.println(mv));
 
+        MovieCast movieCast1 = new MovieCast(sarnie_zniwo, stefan_beton);
+        MovieCast movieCast2 = new MovieCast(sarnie_zniwo, tytanowy_janusz);
+        MovieCast movieCast3 = new MovieCast(sarnie_zniwo, molibdenowy_mateusz);
+        MovieCast movieCast4 = new MovieCast(pocalunek_kojota, franek_smietana_2);
+        MovieCast movieCast5 = new MovieCast(pocalunek_kojota, franek_smietana);
+        MovieCast movieCast6 = new MovieCast(abc_pierwszaka, jozef_beton);
+        MovieCast movieCast7 = new MovieCast(abc_przedszkolaka, jozef_beton);
+        movieCastService.addMovieCast(movieCast1);
+        movieCastService.addMovieCast(movieCast2);
+        movieCastService.addMovieCast(movieCast3);
+        movieCastService.addMovieCast(movieCast4);
+        movieCastService.addMovieCast(movieCast5);
+        movieCastService.addMovieCast(movieCast6);
+        movieCastService.addMovieCast(movieCast7);
     }
 }

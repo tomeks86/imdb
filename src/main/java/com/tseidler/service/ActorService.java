@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ActorService {
@@ -13,8 +14,8 @@ public class ActorService {
     @Autowired
     private ActorRepository actorRepository;
 
-    public ArrayList<Actor> getAllActors() {
-        ArrayList<Actor> results = new ArrayList<>();
+    public List<Actor> getAllActors() {
+        List<Actor> results = new ArrayList<>();
         Iterable<Actor> temp = actorRepository.findAll();
         temp.forEach(actor -> results.add(actor));
         return results;
@@ -24,15 +25,15 @@ public class ActorService {
         actorRepository.save(actor);
     }
 
-    public ArrayList<Actor> findActorByLastname(String lastName) {
+    public List<Actor> findActorByLastname(String lastName) {
         return actorRepository.findAllByLastname(lastName);
     }
 
-    public ArrayList<Actor> findActorsByFirsName(String firstName) {
+    public List<Actor> findActorsByFirsName(String firstName) {
         return actorRepository.findAllByFirstname(firstName);
     }
 
-    public ArrayList<Actor> findAllByFirstnameAndLastname(String firstName, String lastName) {
+    public List<Actor> findAllByFirstnameAndLastname(String firstName, String lastName) {
         return actorRepository.findAllByFirstnameAndLastname(firstName, lastName);
     }
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class MovieService {
@@ -21,7 +22,7 @@ public class MovieService {
         movieRepository.save(movie);
     }
 
-    public void addMovies(ArrayList<Movie> movies) {
+    public void addMovies(List<Movie> movies) {
         movieRepository.save(movies);
     }
 
@@ -29,8 +30,8 @@ public class MovieService {
         return movieRepository.findByTitle(title);
     }
 
-    public ArrayList<Movie> getMovies() {
-        ArrayList<Movie> results = new ArrayList<>();
+    public List<Movie> getMovies() {
+        List<Movie> results = new ArrayList<>();
         movieRepository.findAll().forEach(movie -> results.add(movie));
         return results;
     }
