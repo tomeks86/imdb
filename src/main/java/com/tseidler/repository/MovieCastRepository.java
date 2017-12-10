@@ -10,4 +10,6 @@ public interface MovieCastRepository extends CrudRepository<MovieCast, Integer> 
     List<MovieCast> findMovieCastsByActor_Lastname(String lastName);
 
     List<MovieCast> findMovieCastsByMovie_Title(String title);
+
+    List<MovieCast> findMovieCastsByActor_FirstnameAndActor_Lastname(String firstName, String lastName);
 }

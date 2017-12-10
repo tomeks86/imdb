@@ -23,6 +23,14 @@ public class MovieCast {
     public MovieCast() {
     }
 
+    public Movie getMovie() {
+        return movie;
+    }
+
+    public Actor getActor() {
+        return actor;
+    }
+
     @Override
     public String toString() {
         return String.format("MovieCast{ id: %d, movie: %s, actor: %s",id, movie.toString(), actor.toString());

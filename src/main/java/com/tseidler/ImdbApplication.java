@@ -78,7 +78,8 @@ public class ImdbApplication implements CommandLineRunner {
         MovieCast movieCast4 = new MovieCast(pocalunek_kojota, franek_smietana_2);
         MovieCast movieCast5 = new MovieCast(pocalunek_kojota, franek_smietana);
         MovieCast movieCast6 = new MovieCast(abc_pierwszaka, jozef_beton);
-        MovieCast movieCast7 = new MovieCast(abc_przedszkolaka, jozef_beton);
+        MovieCast movieCast7 = new MovieCast(abc_pierwszaka, stefan_beton);
+        MovieCast movieCast8 = new MovieCast(abc_przedszkolaka, jozef_beton);
         movieCastService.addMovieCast(movieCast1);
         movieCastService.addMovieCast(movieCast2);
         movieCastService.addMovieCast(movieCast3);
@@ -86,5 +87,24 @@ public class ImdbApplication implements CommandLineRunner {
         movieCastService.addMovieCast(movieCast5);
         movieCastService.addMovieCast(movieCast6);
         movieCastService.addMovieCast(movieCast7);
+        movieCastService.addMovieCast(movieCast8);
+
+        System.out.println();
+        System.out.println("Films where Beton is playing:");
+        List<Movie> movies_beton = movieCastService.getMovieCastsByActor_Lastname("Beton");
+        movies_beton.forEach(movie -> System.out.println(movie.toString()));
+        System.out.println();
+        System.out.println("Films where Stefan Beton is playing:");
+        List<Movie> movies_stefan_beton = movieCastService.getMovieCastsByActor_FirstnameAndActor_Lastname("Stefan", "Beton");
+        movies_stefan_beton.forEach(movie -> System.out.println(movie.toString()));
+        System.out.println();
+        System.out.println("Actors playing in Sarnie żniwo:");
+        List<Actor> actors_sarnie = movieCastService.getMovieCastsByMovie_Title("Sarnie żniwo");
+        actors_sarnie.forEach(actor -> System.out.println(actor.toString()));
+        System.out.println();
+        System.out.println("Movies with no actor:");
+        List<Movie> movies_noactor = movieCastService.getMoviesWithCastLowerThan(1);
+        movies_noactor.forEach(movie -> System.out.println(movie.toString()));
+        System.out.println();
     }
 }
