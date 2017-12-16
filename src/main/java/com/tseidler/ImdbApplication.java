@@ -1,8 +1,7 @@
 package com.tseidler;
 
-import com.tseidler.domain.Actor;
-import com.tseidler.domain.Movie;
-import com.tseidler.domain.MovieCast;
+import com.tseidler.domain.*;
+import com.tseidler.repository.ActorJdbcRepository;
 import com.tseidler.service.MovieCastService;
 import com.tseidler.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.tseidler.service.ActorService;
 
+import javax.swing.tree.RowMapper;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +27,30 @@ public class ImdbApplication implements CommandLineRunner {
     private MovieService movieService;
     @Autowired
     private MovieCastService movieCastService;
+    @Autowired
+    ActorJdbcRepository actorJdbcRepository;
 
+
+    public static Connection con = null;
+    public static Connection getConection() {
+        if (con == null) {
+            try {
+                con = DriverManager.getConnection("jdbc:h2:mem:imdb", "sa", "");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return con;
+    }
+    public static void closeConnection(Connection con) {
+        if (con != null) {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public static void main(String[] args) {
 		SpringApplication.run(ImdbApplication.class, args);
@@ -53,11 +80,17 @@ public class ImdbApplication implements CommandLineRunner {
         System.out.println();
 
         Movie sarnie_zniwo = new Movie("Sarnie żniwo");
+        sarnie_zniwo.setMovieDetail(new MovieDetail("superancki film, aktualny nawet w 2050 roku!"));
         Movie pocalunek_kojota = new Movie("Pocałunek kojota");
+        //pocalunek_kojota.setMovieDetail(new MovieDetail("thriller zoofiliczny"));
         Movie browar_awruk = new Movie("Zmierzch browaru \"AWRUK\"");
+        browar_awruk.setMovieDetail(new MovieDetail("film o upadku pewnego bardzo znanego browaru"));
         Movie abc_przedszkolaka = new Movie("ABC przedszkolaka");
+        abc_przedszkolaka.setMovieDetail(new MovieDetail("taki film edukacyjny, \"co i jak\" w przedszkolu :)"));
         Movie abc_pierwszaka = new Movie("ABC pierwszaka");
-        Movie masarnia_satuk = new Movie("Masarnia Satuk - dokument");
+        abc_pierwszaka.setMovieDetail(new MovieDetail("taki film edukacyjny, \"co i jak\" w podstawówce :)"));
+        Movie masarnia_satuk = new Movie("Masarnia Satuk");
+        //masarnia_satuk.setMovieDetail(new MovieDetail("dokument o pewnej ekskluzywnej masarni"));
 
         movieService.addMovie(sarnie_zniwo);
         movieService.addMovie(pocalunek_kojota);
@@ -70,7 +103,7 @@ public class ImdbApplication implements CommandLineRunner {
 
 
         List<Movie> moviesList = movieService.getMovies();
-        moviesList.forEach(mv -> System.out.println(mv));
+        moviesList.forEach(mv -> System.out.println(mv.toString()));
 
         MovieCast movieCast1 = new MovieCast(sarnie_zniwo, stefan_beton);
         MovieCast movieCast2 = new MovieCast(sarnie_zniwo, tytanowy_janusz);
@@ -106,5 +139,20 @@ public class ImdbApplication implements CommandLineRunner {
         List<Movie> movies_noactor = movieCastService.getMoviesWithCastLowerThan(1);
         movies_noactor.forEach(movie -> System.out.println(movie.toString()));
         System.out.println();
+
+        Connection h2 = getConection();
+        ResultSet rs = h2.createStatement().executeQuery("SELECT title FROM film");
+        while (rs.next()) {
+            System.out.println(rs.getString(1));
+        }
+        System.out.println();
+        /*rs = h2.createStatement().executeQuery("SELECT * FROM actor");
+        ActorMaper actorMaper = new ActorMaper();
+        Actor pierwszy = actorMaper.mapRow(rs, 1);
+        System.out.println(pierwszy.toString());*/
+        Actor first = actorJdbcRepository.findByID(1);
+        System.out.println(first.toString());
+        closeConnection(h2);
+
     }
 }
